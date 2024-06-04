@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>Bevásárlólista</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Indie+Flower);
+
+    body {
+      font-family: "Indie Flower", cursive;
+      letter-spacing: 0.1rem;
+      background-image: linear-gradient(90deg, #e8b6b6, 2px, rgba(255,255,255,0), 2px, rgba(255,255,255,0)), linear-gradient(0, #d9eaf3, 1px, rgba(255,255,255,0), 2px, rgba(255,255,255,0));
+      background-position: 4rem 0;
+      background-size: 100% 2.4rem;
+      color: #111;
+      padding: 2.2rem 0 0 5rem;  
+      white-space: nowrap;
+      counter-reset: listCounter;
+    }
+    .delete-button {
+      right: 30px;
+      background-color: #dc3545;
+    }
+
+    h1 {
+      font-size: 3.2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      display: inline-block;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      border-bottom: 2px solid #111;
+    }
+
+    .continuous-list {
+      font-size: 1.8rem;
+      font-weight: 400;
+      padding-left: 0.5rem;
+      margin-bottom: 2.8rem;
+    }
+
+    .continuous-list li {
+      margin-bottom: 0.6rem;
+      position: relative;
+      padding-right: 30px;
+    }
+
+    .continuous-list li::before {  
+      content: counter(listCounter) ". ";  
+      counter-increment: listCounter;
+    }
+
+    .form-container {
+      margin-top: 20px;
+    }
+
+    .form-container label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-container input, .form-container select {
+      margin-bottom: 10px;
+      padding: 5px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .form-container button {
+      padding: 10px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .form-container button:hover {
+      background-color: #218838;
+    }
+
+    .check-button {
+      position: absolute;
+      right: 0;
+      top: 0;
+      padding: 4px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: none;
+    }
+
+    .check-button:hover {
+      background-color: #0056b3;
+    }
+
+    .continuous-list li:hover .check-button {
+      display: block;
+    }
+
+    .checked {
+      text-decoration: line-through;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bevásárlólista</h1>
+
+  <h2>Ételek</h2>
+  <ol class="continuous-list" id="food-list">
+  </ol>
+
+  <h2>Italok</h2>
+  <ol class="continuous-list" id="drinks-list">
+  </ol>
+
+  <h2>Tisztítószerek</h2>
+  <ol class="continuous-list" id="cleaning-list">
+  </ol>
+
+  <div class="form-container">
+    <h2>Új termék hozzáadása</h2>
+    <form id="add-item-form">
+      <label for="category">Kategória:</label>
+      <select id="category" required>
+        <option value="food-list">Ételek</option>
+        <option value="drinks-list">Italok</option>
+        <option value="cleaning-list">Tisztítószerek</option>
+      </select>
+
+      <label for="new-item">Új termék:</label>
+      <input type="text" id="new-item" required>
+      <br>
+      <button type="submit">Hozzáadás</button>
+
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('add-item-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var category = document.getElementById('category').value;
+      var newItem = document.getElementById('new-item').value;
+      var list = document.getElementById(category);
+
+      var listItem = document.createElement('li');
+      listItem.textContent = newItem;
+
+      var checkButton = document.createElement('button');
+      checkButton.textContent = '✔';
+      checkButton.className = 'check-button';
+      checkButton.addEventListener('click', function() {
+        listItem.classList.toggle('checked');
+      });
+
+      var deleteButton = document.createElement('button');
+      deleteButton.textContent = '✖';
+      deleteButton.className = 'delete-button';
+      deleteButton.addEventListener('click', function() {
+        list.removeChild(listItem);
+      });
+
+      listItem.appendChild(deleteButton);
+      list.appendChild(listItem);
+      listItem.appendChild(checkButton);
+      list.appendChild(listItem);
+
+      document.getElementById('new-item').value = '';
+    });
+  </script>
+</body>
+</html>
